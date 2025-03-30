@@ -1,0 +1,45 @@
+{
+    "DIVIDER":"=",
+    "PLAYER1":{
+        "NAME":"John",
+        "STARTING_HEALTH":100,
+        "ATTACKS":{
+            "HEALING_POTIONS":{
+                "AMOUNT":3,
+                "NAME":"Healing Potion"
+            },
+            "MINIONS":{
+                "TURNS":5,
+                "AMOUNT":4,
+                "NAME":"Minion"
+            },
+            "SHIELDS":{
+                "TURNS":5,
+                "AMOUNT":2,
+                "NAME":"Shield",
+                "DIVIDE_DAMAGE":2
+            }
+        }
+    },
+    "PLAYER2":{
+        "NAME":"Tim",
+        "STARTING_HEALTH":100,
+        "ATTACKS":{
+            "HEALING_POTIONS":{
+                "AMOUNT":3,
+                "NAME":"Healing Potion"
+            },
+            "MINIONS":{
+                "TURNS":5,
+                "AMOUNT":4,
+                "NAME":"Minion"
+            },
+            "SHIELDS":{
+                "TURNS":5,
+                "AMOUNT":2,
+                "NAME":"Shield",
+                "DIVIDE_DAMAGE":2
+            }
+        }
+    }
+}
