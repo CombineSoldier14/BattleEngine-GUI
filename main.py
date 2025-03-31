@@ -1,6 +1,7 @@
 import json
 import random
 from tkinter import *
+from tkinter import ttk
 
 version = "1.4.0"
 
@@ -15,7 +16,7 @@ playerHealth = Label(root, text="Loading...")
 playerHealth.place(x=10, y=30)
 
 scrollbar = Scrollbar(root)
-scrollbar.place(x=480, y=0, height=300)
+scrollbar.place(x=480, y=60, height=300)
 
 mainLogView = Listbox(root, yscrollcommand=scrollbar.set)
 mainLogView.place(x=10, y=60, width=470, height=300)
@@ -27,6 +28,15 @@ minionActive.place(x=500, y=0)
 
 shieldActive = Label(root, text="Loading...")
 shieldActive.place(x=500, y=20)
+
+shieldsLeft = Label(root, text="Loading...")
+shieldsLeft.place(x=500, y=60)
+
+shieldDesc = Label(root, text="Loading...")
+shieldDesc.place(x=500, y=80)
+
+minionsLeft = Label(root, text="Loading...")
+minionsLeft.place(x=500, y=100)
 
 with open ('settings.json') as file:
     data = json.load(file)
@@ -148,11 +158,25 @@ class Player:
 
     def getList(self, opposingPlayer: object):
         attacks = {}
-        attacks["Small Attack"] = lambda: self.attack(opposingPlayer, 1, 15, 1, 100, 25)
-        attacks["Large Attack"] = lambda: self.attack(opposingPlayer, 15, 30, 1, 100, 50)
-        attacks[self.HealingPotionsName] = self.heal
-        attacks[f"Summon {self.minionName}"] = self.summonMinion
-        attacks[f"Use {self.shieldName}"] = self.shield
+        attacks["Small Attack"] = {}
+        attacks["Small Attack"]["function"] = lambda: self.attack(opposingPlayer, 1, 15, 1, 100, 25)
+        attacks["Small Attack"]["name"] = "Small Attack"
+        
+        attacks["Large Attack"] = {}
+        attacks["Large Attack"]["function"] = lambda: self.attack(opposingPlayer, 15, 30, 1, 100, 50)
+        attacks["Large Attack"]["name"] = "Large Attack"
+        
+        attacks[self.HealingPotionsName] = {}
+        attacks[self.HealingPotionsName]["function"] = self.heal
+        attacks[self.HealingPotionsName]["name"] = self.HealingPotionsName
+        
+        attacks[f"Summon {self.minionName}"] = {}
+        attacks[f"Summon {self.minionName}"]["function"] = self.summonMinion
+        attacks[f"Summon {self.minionName}"]["name"] = f"Summon {self.minionName}"
+        
+        attacks[f"Use {self.shieldName}"] = {}
+        attacks[f"Use {self.shieldName}"]["function"] = self.shield
+        attacks[f"Use {self.shieldName}"]["name"] = f"Use {self.shieldName}"
         return attacks
 
 def finish(winningPlayer: Player):
@@ -191,7 +215,22 @@ def turn(player1: Player, player2: Player):
     playerHealth.config(text=f"Health: {player1.health}")
     minionActive.config(text=f"Minion Active: {player1.minionActive}")
     shieldActive.config(text=f"Shield Active: {player1.shieldActive}")
+    shieldsLeft.config(text=f"Shields Left: {player1.shields}")
+    shieldDesc.config(text=f"{player1.shieldName}s divide damage by {player1.shieldDamage}. They last for 2 of your turns.")
+    minionsLeft.config(text=f"\nAvailable {player1.minionName}s: {player1.minions}")
+    y = 140
+
+    def on_button_click(func):
+        func()
+        root.quit()
+
+    for x in attacks:
+        Button(root, text=attacks[x]["name"], width=10, height=2, command=lambda func=attacks[x]["function"]: on_button_click(func)).place(x=500, y=y)
+        y += 50
+
+    root.mainloop()
     root.update_idletasks()
+    """
     while True:
         x = input("> ")
         try:
@@ -211,7 +250,8 @@ def turn(player1: Player, player2: Player):
             else:
                 break
         except:
-            print(f"Attack \"{x}\" not found!\n")
+            print(f"Attack \"{x}\" not found!\n")"
+    """
 
 def start(player1: Player, player2: Player):
     print(f"Made with BattleEngine v{version} by CombineSoldier14\n")
