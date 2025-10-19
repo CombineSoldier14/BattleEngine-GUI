@@ -3,7 +3,7 @@ import random
 from tkinter import *
 from tkinter import ttk
 
-version = "1.4.0"
+version = "1.4.5"
 
 root = Tk()
 
@@ -37,6 +37,9 @@ shieldDesc.place(x=500, y=80)
 
 minionsLeft = Label(root, text="Loading...")
 minionsLeft.place(x=500, y=100)
+
+minionsDesc = Label(root, text="Loading...")
+minionsDesc.place(x=500, y=120)
 
 with open ('settings.json') as file:
     data = json.load(file)
@@ -109,6 +112,10 @@ class Player:
                 pass
             print("\n")
             return 1
+        else:
+            print(f"\nThat's a miss!\n")
+            mainLogView.insert(END, f"\nThat's a miss!\n")
+            pass
     
     def heal(self):
         if self.health >= self.max_health:
@@ -159,11 +166,11 @@ class Player:
     def getList(self, opposingPlayer: object):
         attacks = {}
         attacks["Small Attack"] = {}
-        attacks["Small Attack"]["function"] = lambda: self.attack(opposingPlayer, 1, 15, 1, 100, 25)
+        attacks["Small Attack"]["function"] = lambda: self.attack(opposingPlayer, 1, 15, 1, 100, 30)
         attacks["Small Attack"]["name"] = "Small Attack"
         
         attacks["Large Attack"] = {}
-        attacks["Large Attack"]["function"] = lambda: self.attack(opposingPlayer, 15, 30, 1, 100, 50)
+        attacks["Large Attack"]["function"] = lambda: self.attack(opposingPlayer, 15, 30, 1, 100, 60)
         attacks["Large Attack"]["name"] = "Large Attack"
         
         attacks[self.HealingPotionsName] = {}
@@ -217,7 +224,8 @@ def turn(player1: Player, player2: Player):
     shieldActive.config(text=f"Shield Active: {player1.shieldActive}")
     shieldsLeft.config(text=f"Shields Left: {player1.shields}")
     shieldDesc.config(text=f"{player1.shieldName}s divide damage by {player1.shieldDamage}. They last for 2 of your turns.")
-    minionsLeft.config(text=f"\nAvailable {player1.minionName}s: {player1.minions}")
+    minionsLeft.config(text=f"Available {player1.minionName}s: {player1.minions}")
+    minionsDesc.config(text=f"{player1.minionName}s make it less likely for you to attack, but add more damage.")
     y = 140
 
     def on_button_click(func):
